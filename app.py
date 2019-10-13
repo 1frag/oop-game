@@ -31,6 +31,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 def main():
+    tornado.options.parse_command_line()
     app = tornado.web.Application([
             (r'/', MainHandler),
             (r'/new/(?P<target>[^/]*)/', NewObjectHandler),
