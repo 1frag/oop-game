@@ -1,0 +1,10 @@
+{
+  "name": "oop-game",
+  "description": "Simple Game OOP",
+  "repository": "https://github.com/1frag/oop-game.git",
+  "keywords": ["python", "tornado"],
+  "success_url": "/",
+  "env": {
+      "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-python"
+  }
+}
