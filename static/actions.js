@@ -29,13 +29,18 @@ $(document).ready(function() {
         return false;
     });
 
+    $("#createConflict").on("submit", function() {
+        createConflict(this);
+        return false;
+    });
+
 });
 
 jQuery.postJSON = function(url, args, callback) {
     args._xsrf = getCookie("_xsrf");
     $.ajax({url: url, data: $.param(args), dataType: "text", type: "POST",
             success: function(response) {
-        response = eval('(' + response + ')')
+        response = eval('(' + response + ')');
         if (callback) callback(response);
     }, error: function(response) {
         console.log("ERROR:", response);
@@ -105,6 +110,19 @@ function addMember(form) {
 
     $.postJSON("/new/member/", message, function(response) {
         alert(Object.values(response));
+    });
+}
+
+function createConflict(form) {
+    if (!form.who.value || !form.whom.value){
+        alert('fill gaps. not empty');
+        return;
+    }
+    var message = $(form).formToDict();
+
+    $.postJSON("/new/conflict/", message, function(response) {
+        var text = 'Создан конфликт ' + response.result;
+        alert(text);
     });
 }
 

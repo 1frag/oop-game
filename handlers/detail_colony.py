@@ -20,7 +20,7 @@ class DetailColony(tornado.web.RequestHandler):
             if pl.colony == col
         ]
         confs = [
-            conf.id
+            (conf.id, conf.alias)
             for conf in Conflict.objects()
             if col in conf.participants
         ]

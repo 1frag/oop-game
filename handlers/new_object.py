@@ -14,13 +14,24 @@ class NewObjectHandler(tornado.web.RequestHandler):
         if name in Colony.values_list('name', flat=True):
             return dict(error='Failed. Input other name')
 
-        war = Warrior(alias=chief, cost=[], force=10,).save()
+        war = Warrior(
+            alias=chief,
+            cost=[],
+            force=10,
+        ).save()
 
-        col = Colony(name=name, strength=1,
-                     resources=self._start_resources).save()
+        col = Colony(
+            name=name,
+            strength=1,
+            members=[],
+            resources=self._start_resources
+        ).save()
         col.attach_member(war, Role.CHIEF)
 
-        Planet(name=f"planet {name}'s", colony=col).save()
+        Planet(
+            name=f"planet {name}'s",
+            colony=col
+        ).save()
 
         return dict(name=col.name, war=chief, resources=col.resources)
 
@@ -60,6 +71,14 @@ class NewObjectHandler(tornado.web.RequestHandler):
         col.attach_member(war, role=role)
         return {'result': 'Success'}
 
+    def _new_conflict(self):
+        who, whom = map(lambda x: Colony.filter(name=x)[0], [
+            self.get_body_argument('who'),
+            self.get_body_argument('whom'),
+        ])
+        conf: Conflict = who.attack(whom)
+        return {'result': conf.alias}
+
     def _new_resource(self):
         col = self.get_related_colony()
         res_name = self.get_body_argument('res_name')
@@ -82,5 +101,6 @@ class NewObjectHandler(tornado.web.RequestHandler):
             'planet': self._new_planet,
             'member': self._new_member,
             'resource': self._new_resource,
+            'conflict': self._new_conflict,
         }.get(target, er)()
         self.write(json.dumps(data))

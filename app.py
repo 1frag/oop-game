@@ -7,6 +7,7 @@ import tornado.ioloop
 import tornado.locks
 import tornado.web
 import os.path
+import logging
 
 from ctl import Game
 from objects import *
@@ -37,6 +38,9 @@ def main():
             (r'/new/(?P<target>[^/]*)/', NewObjectHandler),
             (r'/colony/detail/(?P<name>[^/]*)/', DetailColony),
             (r'/colony/remove/(?P<name>[^/]*)/', RemoveColony),
+            (r'/conflicts/', ConflictsHandler),
+            (r'/conflict/detail/(?P<code>[^/]*)/', DetailConflict),
+            (r'/conflict/change/(?P<code>[^/]*)/', ChangeConflict),
         ],
         cookie_secret='p@ssw0rd',
         template_path=os.path.join(os.path.dirname(__file__), 'templates'),
@@ -44,6 +48,9 @@ def main():
         xsrf_cookies=True,
         debug=options.debug,
     )
+
+    print("Server listening on port " + str(options.port))
+    logging.getLogger().setLevel(logging.DEBUG)
 
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(options.port)

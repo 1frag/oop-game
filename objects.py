@@ -1,6 +1,6 @@
 from typing import List, Tuple, Union, Dict
 from db_utils.classes import BaseModel
-from random import randrange
+from functions import random_alias
 from enum import Enum, auto
 import attr
 
@@ -32,24 +32,27 @@ class Warrior(BaseModel):
 class Colony(BaseModel):
     name = attr.ib(type=str)
     strength = attr.ib(type=int)
-    members = attr.ib(default=[], type=List[Tuple[Warrior, Role]])
-    resources = attr.ib(default={}, type=Dict[Resource, int])
+    members = attr.ib(type=List[Tuple[Warrior, Role]])
+    resources = attr.ib(type=Dict[Resource, int])
 
     def attack(self, other):
-        Conflict(
-            participants=[self, other],
-            status=ConflictStatus.STARTED,
-            result=[],
-        )
+        conf = Conflict([], [], []).save()
+        conf.add_participant(self)
+        conf.add_participant(other)
+        return conf
 
     def attach_member(self, warrior: Warrior, role=Role.MEMBER):
         self.members.append((warrior, role))
 
 
 @attr.s
-class Debt(BaseModel):
+class Entity(BaseModel):
     from_ = attr.ib(type=Colony)
     to = attr.ib(type=Colony)
+
+
+@attr.s
+class Debt(Entity):
     resource = attr.ib(type=Resource)
     count = attr.ib(type=int)
 
@@ -61,22 +64,23 @@ class Planet(BaseModel):
 
 
 @attr.s
-class Escape(BaseModel):
-    from_ = attr.ib(type=Colony)
-    to = attr.ib(type=Colony)
+class Escape(Entity):
     planet = attr.ib(type=Planet)
 
 
 @attr.s
 class Conflict(BaseModel):
-    id = attr.ib(type=int, default=randrange(1000000000))
-    participants = attr.ib(type=List[Colony], default=[])
+    participants = attr.ib(type=List[Colony])
+    places = attr.ib(type=List[Planet])
+    result = attr.ib(type=List[Entity])
+    alias = attr.ib(type=str, default=None, converter=random_alias)
     status = attr.ib(
         default=ConflictStatus.STARTED,
         type=ConflictStatus
     )
-    places = attr.ib(type=List[Planet], default=[])
-    result = attr.ib(type=List[Union[Debt, Escape]], default=[])  # todo:
+
+    def add_place(self, place: Planet):
+        self.places.append(place)
 
     def add_to_result(self, debt: Debt):
         self.result.append(debt)
@@ -90,3 +94,11 @@ class Conflict(BaseModel):
 
     def add_participant(self, participant: Colony):
         self.participants.append(participant)
+
+    def remove_participant(self, participant: Colony):
+        ind = self.participants.index(participant)
+        self.participants.pop(ind)
+
+    def remove_place(self, place: Planet):
+        ind = self.places.index(place)
+        self.places.pop(ind)

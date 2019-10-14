@@ -76,8 +76,8 @@
     {% if confs %}
     <h4>Конфликты в которых замечена эта колония:</h4>
     <ol>
-        {% for id_ in confs %}
-        <li><a href="/conflict/detail/{{ id_ }}">{{ id_ }}</a></li>
+        {% for id_, alias in confs %}
+        <li><a href="/conflict/detail/{{ id_ }}/">{{ alias }}</a></li>
         {% end %}
     </ol>
     {% else %}
@@ -113,7 +113,7 @@
         Alias: <input type="text" name="alias">
         Force: <input type="number" name="force">
         <input type="hidden" name="_colony_name" value="{{ name }}">
-        <input type="submit" value="Add some resource"/>
+        <input type="submit" value="Attach this member"/>
         {% module xsrf_form_html() %}
     </form>
 

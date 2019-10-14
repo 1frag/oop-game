@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conf detail</title>
+</head>
+<body>
+<p>{{ alias }}</p>
+<p>Участники:</p>
+<ul>
+{% for _ in participants %}
+<li>{{ _.name }} (<a href="/colony/detail/{{ _.name }}/">Перейти</a>)</li>
+{% end %}
+</ul>
+
+{% if not planets %}
+    <p>{{ alias }} проходит вне планет</p>
+{% else %}
+    <p>Планеты на которых разворачивается {{ alias }}:</p>
+    <ul>
+    {% for _ in planets %}
+    <li>{{ _ }}</li>
+    {% end %}
+    </ul>
+{% end %}
+
+<p>Статус конфликта: {{ status }}</p>
+{% if result %}
+<ul>
+    {% for _ in result %}
+        <li>{{ _ }}</li>
+    {% end %}
+</ul>
+{% else %}
+<p>Итогов для <i>{{ alias }}</i> еще пока нет.</p>
+{% end %}
+
+</body>
+</html>
