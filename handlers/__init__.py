@@ -4,3 +4,5 @@ from .remove_colony import RemoveColony
 from .conflicts import ConflictsHandler
 from .conf_detail import DetailConflict
 from .change_conf import ChangeConflict
+from .resolve_conf import ResolveConflict
+

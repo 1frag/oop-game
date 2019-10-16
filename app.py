@@ -41,6 +41,7 @@ def main():
             (r'/conflicts/', ConflictsHandler),
             (r'/conflict/detail/(?P<code>[^/]*)/', DetailConflict),
             (r'/conflict/change/(?P<code>[^/]*)/', ChangeConflict),
+            (r'/conflict/resolve/(?P<code>[^/]*)/', ResolveConflict),
         ],
         cookie_secret='p@ssw0rd',
         template_path=os.path.join(os.path.dirname(__file__), 'templates'),

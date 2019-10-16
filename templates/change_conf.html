@@ -5,47 +5,9 @@
     <title>Change conf</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
-    <script src="{{ static_url('dnd.js') }}"
-            type="text/javascript">
-    </script>
+    <script src="{{ static_url('dnd.js') }}" type="text/javascript"></script>
     <link rel="stylesheet" href="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
-    <style type="text/css">
-        #draggable {
-            font-size: x-large;
-            border: thin solid black;
-            width: 5em;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-        }
-
-        #boundary {
-            position: fixed;
-            left: 50%;
-            height: 100%;
-            width: 2px;
-            background-color: black;
-        }
-
-        .note {
-            position: fixed;
-            color: darkblue;
-            font-size: 20px;
-        }
-
-        #note_left {
-            left: 20%;
-        }
-
-        #note_center {
-            left: 40%;
-            bottom: 15px;
-        }
-
-        #note_right {
-            left: 70%;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ static_url('changes.css') }}"/>
 </head>
 <body>
 
@@ -58,7 +20,6 @@
         'name': "{{ obj[0].alias }}",
     };
     {% else %}
-    console.log("{{ obj.name }}");
     _meta_ = {
         'id': {{ obj.id }},
         'name': "{{ obj.name }}",
@@ -98,6 +59,8 @@
         <input type="submit" value="Save"
                onclick="saveChanges('{{ conf.id }}');">
     </form>
+    <a href="/conflicts/">Обратно к конфликтам</a><br/>
+    <a href="/">Обратно к колониям</a>
 </div>
 <div id="stuff"></div>
 

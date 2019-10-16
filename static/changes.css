@@ -1,0 +1,26 @@
+#boundary {
+    position: fixed;
+    left: 50%;
+    height: 100%;
+    width: 2px;
+    background-color: black;
+}
+
+.note {
+    position: fixed;
+    color: darkblue;
+    font-size: 20px;
+}
+
+#note_left {
+    left: 20%;
+}
+
+#note_center {
+    left: 40%;
+    bottom: 15px;
+}
+
+#note_right {
+    left: 60%;
+}

@@ -28,8 +28,15 @@ class NewObjectHandler(tornado.web.RequestHandler):
         ).save()
         col.attach_member(war, Role.CHIEF)
 
+        def get_random_name():
+            planets = ['Юпитер', 'Марс', 'Меркурий', 'Плутон']
+            adjs = ['Солнечн', 'Радостн', 'Весел', 'Млечн', 'Мрачн']
+            objs = [('галактики', 'ой'), ('системы', 'ой'), ('скопления', 'ого')]
+            sample = '{data[0]} {data[1]}{data[2][1]} {data[2][0]}'
+            return sample.format(data=list(map(random.choice, [planets, adjs, objs])))
+
         Planet(
-            name=f"planet {name}'s",
+            name=get_random_name(),
             colony=col
         ).save()
 

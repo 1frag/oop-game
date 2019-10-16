@@ -30,7 +30,8 @@ class ChangeConflict(tornado.web.RequestHandler):
         cleared_pl = []
         cleared_cols = []
         for pa in conf.participants:  # type: Colony
-            places.extend(pa.members)
+            places.extend(pa.get_related_planets())
+
         for pl in places:  # type: Planet
             if pl not in conf.places:
                 cleared_pl.append(pl)

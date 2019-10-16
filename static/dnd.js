@@ -1,4 +1,4 @@
-counter_for_inner = 15;
+counter_for_inner = 29;
 counter_for_outer = 15;
 $(function () {
     $('.draggable').draggable();
@@ -18,20 +18,23 @@ function createObjectLike(_side_, _type_, _meta_) {
     let obj = document.createElement("div");
     obj.className = "ui-widget ui-corner-all ui-state-error ui-draggable draggable " + _side_;
     obj.style.width = "auto";
-    if (_side_ == "inner") {
+    if (_side_ === "inner") {
         obj.style.left = "10%";
-        obj.style.top = counter_for_inner + "%";
-        counter_for_inner += 10;
+        obj.style.top = "calc(" + counter_for_inner + "px + 80px)";
+        counter_for_inner += 50;
     } else {
-        obj.style.left = "70%";
-        obj.style.top = counter_for_outer + "%";
-        counter_for_outer += 10;
+        obj.style.left = "60%";
+        obj.style.top = "calc(" + counter_for_outer + "px + 40px)";
+        counter_for_outer += 50;
     }
     obj.style.position = "fixed";
-    if (_type_ == 'places') {
+
+    if (_type_ === 'places') {
         obj.innerText = "Планета " + _meta_.name;
-    } else {
+    } else if (_type_ === 'participants') {
         obj.innerText = "Колония " + _meta_.name;
+    } else if (_type_ === '') {
+        // тут может быть ваша реклама
     }
     obj.python_id = _meta_.id;
     obj.python_type = _type_;

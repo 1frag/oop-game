@@ -15,6 +15,7 @@
             <th>count of participants</th>
             <th>detail</th>
             <th>change/add</th>
+            <th>resolve</th>
         </tr>
         {% for id, col in conflicts %}
         <tr>
@@ -22,8 +23,8 @@
             <td>{{ col.alias }}</td>
             <td>{{ len(col.participants) }}</td>
             <td><a href="/conflict/detail/{{ col.id }}/">Подробнее</a></td>
-            <td><a href="/conflict/change/{{ col.id }}/">Разрешить</a></td>
-            </td>
+            <td><a href="/conflict/change/{{ col.id }}/">Изменить</a></td>
+            <td><a href="/conflict/resolve/{{ col.id }}/">Разрешить</a></td>
         </tr>
         {% end %}
     </table>

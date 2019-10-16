@@ -44,6 +44,9 @@ class Colony(BaseModel):
     def attach_member(self, warrior: Warrior, role=Role.MEMBER):
         self.members.append((warrior, role))
 
+    def get_related_planets(self):
+        return Planet.filter(colony=self)
+
 
 @attr.s
 class Entity(BaseModel):
