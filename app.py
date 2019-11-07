@@ -31,6 +31,11 @@ class MainHandler(tornado.web.RequestHandler):
         )
 
 
+def update_builders():
+    for build in Building.objects():
+        build.do_update()
+
+
 def main():
     tornado.options.parse_command_line()
     app = tornado.web.Application([
@@ -55,7 +60,13 @@ def main():
 
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
+    loop = tornado.ioloop.IOLoop.current()
+    period_cbk = tornado.ioloop.PeriodicCallback(
+        update_builders,
+        10 * 1000,  # раз в 10 секунд
+    )
+    period_cbk.start()
+    loop.start()
 
 
 if __name__ == '__main__':

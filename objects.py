@@ -2,6 +2,7 @@ from typing import List, Tuple, Union, Dict
 from db_utils.classes import BaseModel
 from functions import random_alias
 from enum import Enum, auto
+from time import time
 import attr
 
 
@@ -19,6 +20,10 @@ class ConflictStatus(Enum):
 class Resource(BaseModel):
     name = attr.ib(type=str)
     cost = attr.ib(type=int)
+
+    @classmethod
+    def from_string(cls, string):
+        return Resource.filter(name=string)[0]
 
 
 @attr.s
@@ -49,13 +54,34 @@ class Colony(BaseModel):
 
 
 @attr.s
-class Entity(BaseModel):
+class Building(BaseModel):
+    limit = attr.ib(type=int)
+    what = attr.ib(type=Resource)
+    belongs = attr.ib(type=Colony)
+    sec_a_unit = attr.ib(type=int)
+    now = attr.ib(type=int, default=0)
+    last_update_time = attr.ib(type=int, default=0)
+
+    def do_update(self):
+        now = time()
+        if now - self.last_update_time < self.sec_a_unit:
+            return
+
+        if self.now == self.limit:
+            return
+
+        self.now += 1
+        self.last_update_time = now
+
+
+@attr.s
+class BaseConflictResult(BaseModel):
     from_ = attr.ib(type=Colony)
     to = attr.ib(type=Colony)
 
 
 @attr.s
-class Debt(Entity):
+class Debt(BaseConflictResult):
     resource = attr.ib(type=Resource)
     count = attr.ib(type=int)
 
@@ -67,7 +93,7 @@ class Planet(BaseModel):
 
 
 @attr.s
-class Escape(Entity):
+class Escape(BaseConflictResult):
     planet = attr.ib(type=Planet)
 
 
@@ -75,7 +101,7 @@ class Escape(Entity):
 class Conflict(BaseModel):
     participants = attr.ib(type=List[Colony])
     places = attr.ib(type=List[Planet])
-    result = attr.ib(type=List[Entity])
+    result = attr.ib(type=List[BaseConflictResult])
     alias = attr.ib(type=str, default=None, converter=random_alias)
     status = attr.ib(
         default=ConflictStatus.STARTED,
@@ -85,7 +111,7 @@ class Conflict(BaseModel):
     def add_place(self, place: Planet):
         self.places.append(place)
 
-    def add_to_result(self, debt: Debt):
+    def add_to_result(self, debt: BaseConflictResult):
         self.result.append(debt)
 
     def set_status(self, status: Union[ConflictStatus, str]):

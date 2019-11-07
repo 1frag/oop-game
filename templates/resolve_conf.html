@@ -19,7 +19,7 @@
 
 <form>
     <div id="planets" class="storage">
-        {{ sharing }}
+        {{ planets }}
     </div>
     <div id="code" class="storage">
         {{ conf.id }}
@@ -27,6 +27,7 @@
     <div id="resources" class="storage">
         {{ resources }}
     </div>
+    <h2>Рапределение планет</h2>
     <label>
         <span id="cap-pl">
             SomeText
@@ -37,7 +38,7 @@
             {% end %}
         </select>
     </label>
-    <input type="submit" value="Заполнить далее" onclick="nextValue()"/>
+    <input type="button" onclick="nextValue()" id="input"/>
 </form>
 
 </body>

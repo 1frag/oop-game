@@ -94,6 +94,16 @@ class NewObjectHandler(tornado.web.RequestHandler):
         col.resources[res_name] += int(count)
         return {'result': 'Success'}
 
+    def _new_build(self):
+        col = self.get_related_colony()
+        res_name = self.get_body_argument('res_name')
+        res = Resource.from_string(res_name)
+        sec_a_unit = self.get_body_argument('sec_a_unit')
+        limit = self.get_body_argument('limit')
+
+        Building(limit, res, col, sec_a_unit,
+                 last_update_time=time()).save()
+
     @property
     def _start_resources(self):
         return {res.name: random.randrange(10) for res in Resource.objects()}
@@ -109,5 +119,6 @@ class NewObjectHandler(tornado.web.RequestHandler):
             'member': self._new_member,
             'resource': self._new_resource,
             'conflict': self._new_conflict,
+            'build': self._new_build,
         }.get(target, er)()
         self.write(json.dumps(data))
